@@ -1,0 +1,362 @@
+<!-- Home.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<link rel="stylesheet" type="text/css" href="HOME.css">
+<style>
+  .liked {
+    background-color: green;
+  }
+  .liked:hover {
+    background-color: darkgreen; /* Change the background color to dark green when hovered over */
+}
+</style>
+</head>
+<body>
+    <header id="top-bar">
+    <nav>
+        <ul>
+            <li class="nav-item"><a href="/">Home</a></li>
+            <li class="nav-item"><a href="/addfriend">Add Friends</a></li> <!-- Add this line -->
+            <li class="nav-item"><a href="#">Chat</a></li>
+        </ul>
+    </nav>
+</header>
+    <main>
+        <aside id="left-side">
+            <h2>Chat</h2>
+            <!-- Each friend represented as a div with picture and name -->
+            <% friends.forEach(friend => { %>
+                <div class="friend">
+                    <img src="<%= friend.profile_picture %>" alt="<%= friend.username %>" class="friend-img">
+                    <p><%= friend.username %></p>
+                </div>
+            <% }); %>
+        </aside>
+    <section id="center">
+    <!-- Posts will be dynamically added here -->
+    <% posts.forEach(post => { %>
+    <div class="post" data-post-id="<%= post.id %>" data-liked="<%= post.liked %>">
+        <div class="post-header">
+            <img src="<%= post.profile_picture %>" alt="<%= post.username %>'s Profile Picture">
+            <span><%= post.username %></span>
+        </div>
+        <div class="post-content">
+            <p><%= post.text %></p>
+            <% if (post.file_path) { %>
+            <% if (post.file_type === 'image') { %>
+            <img src="<%= post.file_path %>" alt="Post Image">
+            <% } else if (post.file_type === 'video') { %>
+            <video controls>
+                <source src="<%= post.file_path %>" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <% } else if (post.file_type === 'audio') { %>
+            <audio controls>
+                <source src="<%= post.file_path %>" type="audio/mp3">
+                Your browser does not support the audio tag.
+            </audio>
+            <% } else if (post.file_type === 'document') { %>
+            <a href="<%= post.file_path %>">Download Document</a>
+            <% } %>
+            <% } %>
+        </div>
+        <!-- Comment section -->
+        <div class="post-comments">
+            <% if (post.comments && post.comments.length > 0) { %>
+            <% post.comments.forEach(comment => { %>
+            <div class="comment">
+                <p><%= comment.username %>: <%= comment.text %></p>
+            </div>
+            <% }); %>
+            <% } else { %>
+            <p class="no-comments">No comments available.</p>
+            <% } %>
+        </div>
+        <!-- Comment input area -->
+        <div class="comment-input-wrapper">
+    <textarea class="comment-textarea" placeholder="Write your comment"></textarea>
+    <button class="post-comment-btn">Post</button>
+</div>
+        <div class="post-actions">
+            <button class="like-btn<%= post.liked ? ' liked' : '' %>">Like (<%= post.likes %>)</button>
+            <button class="share-btn">Share (<%= post.shares %>)</button>
+            <button class="comment-btn">Comment</button>
+        </div>
+    </div>
+    <% }); %>
+</section>
+
+
+        <aside id="right-side">
+            <div class="profile">
+                <img id="profile-img" src="<%= user.profile_picture %>" alt="<%= user.username %>'s Profile Picture">
+                <h3><%= user.username %></h3>
+            </div>
+            <div class="search">
+                <input type="text" id="search-bar" placeholder="Search...">
+            </div>
+            <div id="post-form">
+  <h3>Create New Post</h3>
+  <textarea id="post-text" placeholder="What's on your mind?"></textarea>
+  <input type="file" id="post-file" accept="image/*, video/*"> <!-- Input field for file uploads -->
+  <button id="post-btn">Post</button>
+</div>
+
+
+        </aside>
+    </main>
+    <script src="Home.js"></script>
+ <!-- Home.ejs -->
+<!-- Home.ejs -->
+<script>
+    // Client-side code to handle like button click
+    document.querySelectorAll('.like-btn').forEach(async (btn) => {
+        const postId = btn.closest('.post').dataset.postId;
+        const response = await fetch(`/check-like?postId=${postId}&userId=<%= user.id %>`);
+        const data = await response.json();
+        if (response.ok) {
+            // Check if the post is liked by the user and set button color accordingly
+            btn.classList.toggle('liked', data.liked);
+        } else {
+            alert(data.error);
+        }
+
+        btn.addEventListener('click', async () => {
+            const liked = btn.classList.contains('liked');
+            const response = await fetch('/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId, userId: '<%= user.id %>', liked }) // Pass user id dynamically
+            });
+            const responseData = await response.json();
+            if (response.ok) {
+                // Update like count on button text
+                let likeCount = parseInt(btn.textContent.match(/\d+/)[0]);
+                likeCount = liked ? likeCount - 1 : likeCount + 1; // Increment or decrement like count based on user action
+                btn.textContent = `Like (${likeCount})`;
+                // Toggle liked class for button color
+                btn.classList.toggle('liked', responseData.liked);
+            } else {
+                alert(responseData.error);
+            }
+        });
+    });
+</script>
+<script>
+// Client-side code to handle posting a new post
+// Client-side code to handle posting a new post
+document.getElementById('post-btn').addEventListener('click', async () => {
+  const text = document.getElementById('post-text').value.trim();
+  if (!text) {
+    alert('Please enter some text for your post.');
+    return;
+  }
+
+  const response = await fetch('/post', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ userId: '<%= user.id %>', text })
+  });
+
+  if (response.ok) {
+    const postData = await response.json();
+    // Call a function to append the new post to the page
+    appendPost(postData);
+  } else {
+    const data = await response.json();
+    alert(data.error || 'An error occurred while adding your post');
+  }
+});
+
+// Function to append a new post to the page
+function appendPost(postData) {
+  const { id, username, profile_picture, text, file_path, file_type, likes, shares } = postData;
+
+  // Create HTML for the new post
+  const postHTML = `
+    <div class="post" data-post-id="${id}" data-liked="false">
+      <div class="post-header">
+          <img src="${profile_picture}" alt="${username}'s Profile Picture">
+          <span>${username}</span>
+      </div>
+      <div class="post-content">
+          <p>${text}</p>
+          ${fileHTML(file_path, file_type)}
+      </div>
+      <div class="post-actions">
+          <button class="like-btn">Like (${likes})</button>
+          <button class="share-btn">Share (${shares})</button>
+          <button class="comment-btn">Comment</button>
+      </div>
+    </div>
+  `;
+
+  // Append the new post to the page
+  document.getElementById('center').insertAdjacentHTML('afterbegin', postHTML);
+}
+
+// Function to generate HTML for different types of post attachments (image, video, audio, document)
+function fileHTML(filePath, fileType) {
+  if (!filePath) return '';
+  switch (fileType) {
+    case 'image':
+      return `<img src="${filePath}" alt="Post Image">`;
+    case 'video':
+      return `
+        <video controls>
+          <source src="${filePath}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      `;
+    case 'audio':
+      return `
+        <audio controls>
+          <source src="${filePath}" type="audio/mp3">
+          Your browser does not support the audio tag.
+        </audio>
+      `;
+    case 'document':
+      return `<a href="${filePath}">Download Document</a>`;
+    default:
+      return '';
+  }
+}
+
+
+</script>
+<script>
+ document.getElementById('post-btn').addEventListener('click', async () => {
+  const text = document.getElementById('post-text').value.trim();
+  const fileInput = document.getElementById('post-file');
+  const file = fileInput.files[0]; // Get the selected file
+  const userId = document.getElementById('user-id').value; // Get the user ID
+
+  if (!text && !file) {
+    alert('Please enter some text or select a file for your post.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('userId', userId); // Include the userId in the form data
+  formData.append('text', text);
+  if (file) {
+    formData.append('file', file);
+  }
+
+  const response = await fetch('/post', {
+    method: 'POST',
+    body: formData
+  });
+
+  if (response.ok) {
+    alert('Post added successfully');
+    window.location.reload(); // Reload the page to display the new post
+  } else {
+    const data = await response.json();
+    alert(data.error || 'An error occurred while adding your post');
+  }
+});
+
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+  const posts = document.querySelectorAll('.post');
+  posts.forEach(async (post) => {
+    const postId = post.dataset.postId;
+    const response = await fetch(`/comments?postId=${postId}`);
+    const comments = await response.json();
+    const commentContainer = post.querySelector('.post-comments');
+    comments.forEach(comment => {
+      const commentHTML = `
+        <div class="comment">
+          <p>${comment.username}: ${comment.text}</p>
+        </div>
+      `;
+      commentContainer.insertAdjacentHTML('beforeend', commentHTML);
+    });
+  });
+});
+
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const commentButtons = document.querySelectorAll('.comment-btn');
+    
+    commentButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const postElement = button.closest('.post');
+            const commentInputWrapper = postElement.querySelector('.comment-input-wrapper');
+            commentInputWrapper.style.display = 'block'; // Show the comment input area
+        });
+    });
+
+    // Handle post comment button click
+    const postCommentButtons = document.querySelectorAll('.post-comment-btn');
+    
+    postCommentButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const postElement = button.closest('.post');
+            const postId = postElement.dataset.postId;
+            const commentTextarea = postElement.querySelector('.comment-textarea');
+            const commentText = commentTextarea.value.trim();
+
+            if (!commentText) {
+                alert('Please enter your comment.');
+                return;
+            }
+
+            // Send the comment data to the server
+            const response = await fetch('/comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId, commentText })
+            });
+
+            if (response.ok) {
+                commentTextarea.value = ''; // Clear the comment textarea
+            } else {
+                const data = await response.json();
+                alert(data.error || 'An error occurred while adding your comment.');
+            }
+        });
+    });
+});
+
+
+</script>
+<script>
+ document.addEventListener('DOMContentLoaded', async () => {
+    const posts = document.querySelectorAll('.post');
+    posts.forEach(async (post) => {
+        const postId = post.dataset.postId;
+        const response = await fetch(`/comments?postId=${postId}`);
+        const comments = await response.json();
+        const commentContainer = post.querySelector('.post-comments');
+        commentContainer.innerHTML = ''; // Clear existing comments
+        comments.forEach(comment => {
+            const commentHTML = `
+                <div class="comment">
+                    <p>${comment.username}: ${comment.text}</p>
+                </div>
+            `;
+            commentContainer.insertAdjacentHTML('beforeend', commentHTML);
+        });
+    });
+});
+
+</script>
+<script>
+
+</Script>
+</body>
+</html>

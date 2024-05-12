@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<link rel="stylesheet" type="text/css" href="HOME.css">
+</head>
+<body>
+    <header id="top-bar">
+        <nav>
+            <ul>
+                <li class="nav-item"><a href="HOME.html">Home</a></li>
+                <li class="nav-item"><a href="add friend.html">Add Friends</a></li>
+                <li class="nav-item"><a href="#">Chat</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <aside id="left-side">
+            <h2>Chat</h2>
+            <!-- Each friend represented as a div with picture and name -->
+            <div class="friend">
+                <img src="images.jpg" alt="Friend 1" class="friend-img">
+                <p>Friend 1</p>
+            </div>
+            <div class="friend">
+                <img src="images.jpg" alt="Friend 2" class="friend-img">
+                <p>Friend 2</p>
+            </div>
+            <div class="friend">
+                <img src="images.jpg" alt="Friend 3" class="friend-img">
+                <p>Friend 3</p>
+            </div>
+            <!-- Add more friends as needed -->
+        </aside>
+        <section id="center">
+            <!-- Posts will be dynamically added here -->
+        </section>
+        <aside id="right-side">
+            <div class="profile">
+                <img id="profile-img" src="profile.jpg" alt="Profile Image">
+                <h3>Profile Name</h3>
+            </div>
+            <div class="search">
+                <input type="text" id="search-bar" placeholder="Search...">
+            </div>
+        </aside>
+    </main>
+    <script src="Home.js"></script>
+</body>
+</html>

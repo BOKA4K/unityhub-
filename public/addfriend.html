@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Friends</title>
+    <link rel="stylesheet" href="addfriend.css">
+</head>
+<body>
+    <header id="top-bar">
+        <h1>UnityHub</h1>
+        <nav>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/addfriend">Add Friends</a></li>
+                <li><a href="/chat">Chat</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <h1>Search Users</h1>
+    <input type="text" id="search-input" placeholder="Search users...">
+    <button id="search-btn">Search</button>
+    
+    <h2>Search Results</h2>
+    <ul id="search-results"></ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const searchResults = document.getElementById('search-results');
+        
+            searchBtn.addEventListener('click', async () => {
+                const query = searchInput.value.trim();
+                if (!query) {
+                    alert('Please enter a search query.');
+                    return;
+                }
+        
+                try {
+                    const response = await fetch(`/search-users?q=${query}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch search results.');
+                    }
+                    const users = await response.json();
+                    displaySearchResults(users);
+                } catch (error) {
+                    console.error(error.message);
+                    alert('An error occurred while fetching search results.');
+                }
+            });
+        
+            function displaySearchResults(users) {
+                searchResults.innerHTML = ''; // Clear previous search results
+                if (users.length === 0) {
+                    searchResults.innerHTML = '<li>No users found.</li>';
+                    return;
+                }
+                users.forEach(user => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${user.username} (${user.email})`;
+                    const addButton = document.createElement('button');
+                    addButton.textContent = 'Add Friend';
+                    addButton.addEventListener('click', async () => {
+                        try {
+                            const response = await fetch(`/add-friend/${user.id}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                            if (!response.ok) {
+                                throw new Error('Failed to add friend.');
+                            }
+                            alert('Friend request sent successfully.');
+                        } catch (error) {
+                            console.error(error.message);
+                            alert('An error occurred while sending friend request.');
+                        }
+                    });
+                    listItem.appendChild(addButton);
+                    searchResults.appendChild(listItem);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

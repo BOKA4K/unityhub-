@@ -1,0 +1,275 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  #top-bar {
+    background-color: #222;
+    padding: 10px;
+    text-align: center; /* Center the links */
+  }
+  
+  #top-bar nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  #top-bar nav ul li {
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  #top-bar nav ul li a {
+    color: #fff; /* Change link color */
+    text-decoration: none; /* Remove underline */
+  }
+  
+  #left-side {
+    margin-top: 12px;
+    float: left;
+    width: 20%;
+    background-color: #444;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  #center {
+    margin-top: 12px;
+    float: left;
+    width: 52%;
+    padding: 20px;
+  }
+  
+  #right-side {
+    margin-top: 12px;
+    float: right;
+    width: 20%;
+    background-color: #444;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .post {
+    background-color: #555;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+  }
+  
+  .btn {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #222;
+  }
+  
+  .likes,
+  .comments,
+  .shares {
+    color: #ccc;
+    margin-left: 10px;
+  }
+  
+  .comments-section {
+    display: none;
+  }
+  
+  .comment-input-wrapper {
+    margin-top: 10px;
+  }
+  
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    background-color: #666;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  textarea {
+    width: calc(100% - 50px); /* Adjust for avatar and button */
+    padding: 5px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+  }
+  
+  button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #222;
+  }
+  
+  .profile {
+    text-align: center;
+  }
+  
+  #profile-img {
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #555;
+  }
+  
+  .search input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    background-color: #222;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+  }
+  /* CSS styles for the comments */
+  .comment {
+    margin-top: 10px;
+  }
+  
+  .comment .commenter-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    /* Add additional styling as needed */
+  }
+  
+  .comment .commenter-name {
+    font-weight: bold;
+    color: #333; /* Change the color as needed */
+    /* Add additional styling as needed */
+  }
+  
+  .comment .comment-text {
+    /* Add additional styling as needed */
+  }
+  .friend-img{
+    width: 100px;
+    height: 100px;
+  }
+  .friend {
+    margin-bottom: 20px;
+    margin-left: 5px;
+    background-color: gray;
+    width: 95%;
+    border-radius:5px;
+    
+
+}
+/* Add spacing between posts */
+.post {
+  margin-bottom: 20px;
+}
+
+/* Style for comment section */
+.post-comments {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.comment {
+  margin-bottom: 5px;
+}
+.no-comments {
+  color: #999; /* Set the text color to a gray shade */
+  font-style: italic; /* Italicize the text */
+  margin-top: 10px; /* Add some space above the message */
+}
+/* Style for comment section */
+.post-comments {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #555; /* Adjust background color */
+  border-radius: 5px;
+}
+
+/* Style for individual comments */
+.comment {
+  margin-top: 10px;
+  padding: 5px;
+  background-color: #444; /* Adjust background color */
+  border-radius: 5px;
+}
+
+.comment p {
+  color: #fff; /* Adjust text color */
+}
+
+.comment .commenter-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-color: #666; /* Adjust background color */
+}
+
+.comment .commenter-name {
+  font-weight: bold;
+  color: #fff; /* Adjust text color */
+}
+
+.comment .comment-text {
+  color: #ccc; /* Adjust text color */
+}
+.post-comments {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #555; /* Adjust background color */
+  border-radius: 5px;
+}
+
+/* Style for individual comments */
+.comment {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #444; /* Adjust background color */
+  border-radius: 5px;
+}
+
+/* Style for comment text */
+.comment p {
+  color: #fff; /* Adjust text color */
+}
+
+/* Style for commenter avatar */
+.comment .commenter-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-color: #666; /* Adjust background color */
+}
+
+/* Style for commenter name */
+.comment .commenter-name {
+  font-weight: bold;
+  color: #fff; /* Adjust text color */
+}
+
+/* Style for comment text */
+.comment .comment-text {
+  color: #ccc; /* Adjust text color */
+}

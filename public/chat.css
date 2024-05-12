@@ -1,0 +1,106 @@
+/* chat.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #222; /* Dark background color */
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+  float: left;
+  width: 250px; /* Adjust width as needed */
+  background-color: #333; /* Darker background color for sidebar */
+  color: #fff; /* White text color */
+  padding: 20px;
+}
+
+.friends-list {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0;
+  margin: 0;
+  
+}
+
+.friends-list li {
+  margin-bottom: 40px;
+  
+}
+
+.friends-list li img {
+  width: 30px; /* Adjust image width as needed */
+  height: 30px; /* Adjust image height as needed */
+  border-radius: 50%; /* Make images round */
+  margin-right: 10px;
+}
+
+.friend-name {
+  font-weight: bold;
+}
+
+.chat-container {
+  max-width: 600px; /* Adjust max-width as needed */
+  margin: 20px auto;
+  background-color: rgba(75, 75, 75, 0.8);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Clear floats */
+}
+
+.messages {
+  height: 300px;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sender-message {
+  background-color: #fff;
+}
+
+.receiver-message {
+  color: #fff;
+  background-color: #000000;
+  text-align: right; /* Align receiver messages to the right */
+}
+
+.message .sender {
+  font-weight: bold;
+  color: #333;
+}
+
+.message .timestamp {
+  font-size: 12px;
+  color: #888;
+}
+
+.input-container {
+  padding: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.input-container input[type="text"] {
+  width: calc(100% - 80px);
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.input-container button {
+  width: 60px;
+  padding: 10px;
+  border: none;
+  background-color: #333;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-container button:hover {
+  background-color: #555;
+}

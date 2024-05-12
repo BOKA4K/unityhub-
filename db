@@ -1,0 +1,101 @@
+CREATE DATABASE unityhub2;
+USE unityhub2;
+
+-- Create Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    profile_picture VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Posts Table
+CREATE TABLE posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    text TEXT NOT NULL,
+    likes INT DEFAULT 0,
+    shares INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id)
+        REFERENCES users (id)
+);
+
+-- Create Post Attachments Table
+CREATE TABLE post_attachments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    file_type ENUM('image', 'video', 'audio', 'document') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id)
+        REFERENCES posts (id)
+);
+
+-- Create Post Comments Table
+CREATE TABLE post_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id)
+        REFERENCES posts (id),
+    FOREIGN KEY (user_id)
+        REFERENCES users (id)
+);
+SELECT 
+    *
+FROM
+    users;
+-- Create Friends Table
+CREATE TABLE friends (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    profile_picture VARCHAR(255),
+    user_id INT NOT NULL,
+    friend_id INT NOT NULL,
+    FOREIGN KEY (user_id)
+        REFERENCES users (id),
+    FOREIGN KEY (friend_id)
+        REFERENCES users (id),
+    UNIQUE KEY (user_id , friend_id)
+);
+
+-- Create Chat Messages Table
+CREATE TABLE chat_messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message TEXT NOT NULL,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id)
+        REFERENCES users (id),
+    FOREIGN KEY (receiver_id)
+        REFERENCES users (id)
+);
+
+-- Create Post Likes Table
+CREATE TABLE post_likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id)
+        REFERENCES posts (id),
+    FOREIGN KEY (user_id)
+        REFERENCES users (id),
+    UNIQUE KEY (post_id , user_id)
+);
+SELECT 
+    *
+FROM
+    post_comments;
+TRUNCATE TABLE post_comments;
+TRUNCATE TABLE friends;
+TRUNCATE TABLE chat_messages;
+TRUNCATE TABLE post_likes;
+TRUNCATE TABLE post_attachments;
+TRUNCATE TABLE posts;
+TRUNCATE TABLE users;

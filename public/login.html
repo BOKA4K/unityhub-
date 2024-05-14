@@ -9,7 +9,7 @@
 <body>
   <div class="login-container">
     <h2>Login</h2>
-    <form id="loginForm" action="/login" method="post"> <!-- Updated action attribute -->
+    <form id="loginForm" action="/login" method="post"> 
       <div class="input-group">
         <label for="username">Username</label>
         <input type="text" id="username" name="username" required>
@@ -19,7 +19,7 @@
         <input type="password" id="password" name="password" required>
       </div>
       <button type="submit" class="button">Login</button>
-      <div id="errorMessage" class="error-message"></div> <!-- Error message will be displayed here -->
+      <div id="errorMessage" class="error-message"></div> 
     </form>
     <div>
       <p>Don't have an account? <a href="signup.html" class="button">Sign Up</a></p>
@@ -31,7 +31,7 @@
   const errorMessage = document.getElementById('errorMessage');
   const urlParams = new URLSearchParams(window.location.search);
   const error = urlParams.get('error');
-  console.log('Error:', error); // Check if error is being correctly retrieved
+  console.log('Error:', error); 
   if (error) {
     errorMessage.textContent = error;
   }

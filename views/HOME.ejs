@@ -11,7 +11,7 @@
     background-color: green;
   }
   .liked:hover {
-    background-color: darkgreen; /* Change the background color to dark green when hovered over */
+    background-color: darkgreen; 
 }
 </style>
 </head>
@@ -30,12 +30,10 @@
     <main>
        
     <section id="center">
-    <!-- Posts will be dynamically added here -->
     <% posts.forEach(post => { %>
     <div class="post" data-post-id="<%= post.id %>" data-liked="<%= post.liked %>">
         <div class="post-header">
-            <img src="<%= post.profile_picture %>" alt="<%= post.username %>'s Profile Picture">
-            <span><%= post.username %></span>
+            <span class="username"><%= post.username %></span>
         </div>
         <div class="post-content">
             <p><%= post.text %></p>
@@ -57,7 +55,6 @@
             <% } %>
             <% } %>
         </div>
-        <!-- Comment section -->
         <div class="post-comments">
             <% if (post.comments && post.comments.length > 0) { %>
             <% post.comments.forEach(comment => { %>
@@ -69,7 +66,6 @@
             <p class="no-comments">No comments available.</p>
             <% } %>
         </div>
-        <!-- Comment input area -->
         <div class="comment-input-wrapper">
     <textarea class="comment-textarea" placeholder="Write your comment"></textarea>
     <button class="post-comment-btn">Post</button>
@@ -92,7 +88,6 @@
             <div id="post-form">
   <h3>Create New Post</h3>
   <textarea id="post-text" placeholder="What's on your mind?"></textarea>
-  <input type="file" id="post-file" accept="image/*, video/*"> <!-- Input field for file uploads -->
   <button id="post-btn">Post</button>
 </div>
 
@@ -100,16 +95,14 @@
         </aside>
     </main>
     <script src="Home.js"></script>
- <!-- Home.ejs -->
-<!-- Home.ejs -->
+
+
 <script>
-    // Client-side code to handle like button click
     document.querySelectorAll('.like-btn').forEach(async (btn) => {
         const postId = btn.closest('.post').dataset.postId;
         const response = await fetch(`/check-like?postId=${postId}&userId=<%= user.id %>`);
         const data = await response.json();
         if (response.ok) {
-            // Check if the post is liked by the user and set button color accordingly
             btn.classList.toggle('liked', data.liked);
         } else {
             alert(data.error);
@@ -122,15 +115,13 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ postId, userId: '<%= user.id %>', liked }) // Pass user id dynamically
+                body: JSON.stringify({ postId, userId: '<%= user.id %>', liked }) 
             });
             const responseData = await response.json();
             if (response.ok) {
-                // Update like count on button text
                 let likeCount = parseInt(btn.textContent.match(/\d+/)[0]);
-                likeCount = liked ? likeCount - 1 : likeCount + 1; // Increment or decrement like count based on user action
+                likeCount = liked ? likeCount - 1 : likeCount + 1; 
                 btn.textContent = `Like (${likeCount})`;
-                // Toggle liked class for button color
                 btn.classList.toggle('liked', responseData.liked);
             } else {
                 alert(responseData.error);
@@ -174,8 +165,7 @@ function appendPost(postData) {
   const postHTML = `
     <div class="post" data-post-id="${id}" data-liked="false">
       <div class="post-header">
-          <img src="${profile_picture}" alt="${username}'s Profile Picture">
-          <span>${username}</span>
+          <span class="username">${username}</span>
       </div>
       <div class="post-content">
           <p>${text}</p>
@@ -346,7 +336,56 @@ function fileHTML(filePath, fileType) {
 
 </script>
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const postCommentButtons = document.querySelectorAll('.post-comment-btn');
+        
+        postCommentButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const postElement = button.closest('.post');
+                const postId = postElement.dataset.postId;
+                const commentTextarea = postElement.querySelector('.comment-textarea');
+                const commentText = commentTextarea.value.trim();
+    
+                if (!commentText) {
+                    alert('Please enter your comment.');
+                    return;
+                }
+    
+                // Send the comment data to the server
+                const response = await fetch('/comment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ postId, commentText })
+                });
+    
+                if (response.ok) {
+                    // Clear the comment textarea
+                    commentTextarea.value = '';
+    
+                    // Retrieve the newly added comment data
+                    const newCommentData = await response.json();
+    
+                    // Create HTML markup for the new comment
+                    const newCommentHTML = `
+                        <div class="comment">
+                            <p>${newCommentData.username}: ${newCommentData.text}</p>
+                        </div>
+                    `;
+    
+                    // Find the comment container within the post element and append the new comment HTML
+                    const commentContainer = postElement.querySelector('.post-comments');
+                    commentContainer.insertAdjacentHTML('beforeend', newCommentHTML);
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'An error occurred while adding your comment.');
+                }
+            });
+        });
+    });
 
+    
 </Script>
 </body>
 </html>

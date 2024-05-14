@@ -107,7 +107,7 @@ body {
 
 #top-bar nav {
   flex-grow: 1;
-  text-align: center; /* Center the navigation */
+  text-align: center; 
 }
 
 #top-bar nav ul {

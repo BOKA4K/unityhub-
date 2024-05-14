@@ -2,21 +2,21 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #222; /* Dark background color */
+  background-color: #222; 
   margin: 0;
   padding: 0;
 }
 
 .sidebar {
   float: left;
-  width: 250px; /* Adjust width as needed */
-  background-color: #333; /* Darker background color for sidebar */
-  color: #fff; /* White text color */
+  width: 250px; 
+  background-color: #333; 
+  color: #fff; 
   padding: 20px;
 }
 
 .friends-list {
-  list-style-type: none; /* Remove bullet points */
+  list-style-type: none; 
   padding: 0;
   margin: 0;
   
@@ -28,9 +28,9 @@ body {
 }
 
 .friends-list li img {
-  width: 30px; /* Adjust image width as needed */
-  height: 30px; /* Adjust image height as needed */
-  border-radius: 50%; /* Make images round */
+  width: 30px; 
+  height: 30px; 
+  border-radius: 50%; 
   margin-right: 10px;
 }
 
@@ -39,12 +39,12 @@ body {
 }
 
 .chat-container {
-  max-width: 600px; /* Adjust max-width as needed */
+  max-width: 600px; 
   margin: 20px auto;
   background-color: rgba(75, 75, 75, 0.8);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Clear floats */
+  overflow: hidden; 
 }
 
 .messages {
@@ -66,7 +66,7 @@ body {
 .receiver-message {
   color: #fff;
   background-color: #000000;
-  text-align: right; /* Align receiver messages to the right */
+  text-align: right; 
 }
 
 .message .sender {
@@ -107,7 +107,7 @@ body {
 #top-bar {
   background-color: #222;
   padding: 10px;
-  text-align: center; /* Center the links */
+  text-align: center; 
 }
 
 #top-bar nav ul {
@@ -122,8 +122,8 @@ body {
 }
 
 #top-bar nav ul li a {
-  color: #fff; /* Change link color */
-  text-decoration: none; /* Remove underline */
+  color: #fff;
+  text-decoration: none; 
 }
 #top-bar {
   background-color: #333;
@@ -177,7 +177,7 @@ body {
 
 #top-bar nav {
   flex-grow: 1;
-  text-align: center; /* Center the navigation */
+  text-align: center; 
 }
 
 #top-bar nav ul {
@@ -200,4 +200,17 @@ body {
 
 #top-bar nav ul li a:hover {
   background-color: #555;
+}
+.friends-list li button {
+  padding: 5px 10px; 
+  background-color: #555; 
+  color: #fff; 
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 50px;
+}
+
+.friends-list li button:hover {
+  background-color: #777; 
 }

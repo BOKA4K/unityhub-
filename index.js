@@ -148,7 +148,7 @@ app.post('/signup', (req, res) => {
         console.error('Error inserting user into database:', insertErr.message);
         return res.status(500).json({ error: 'An error occurred while processing your request' });
       }
-      res.status(200).json({ message: 'User signed up successfully' });
+      res.sendFile(path.join(__dirname, 'public', 'login.html'));
     });
   });
 });
@@ -256,7 +256,7 @@ app.post('/post', upload.single('file'), (req, res) => {
   });
 });
  
-// Add route to handle posting comments
+//  route to handle posting comments
 app.post('/comment', (req, res) => {
   const { postId, commentText } = req.body;
   const userId = req.session.user.id;
@@ -288,7 +288,6 @@ app.get('/comments', (req, res) => {
 });
 
 // Serve the add friends.html page
-// Serve the add friends.html page
 app.get('/addfriend', (req, res) => {
   // Check if user is logged in
   if (!req.session.user) {
@@ -313,7 +312,6 @@ app.get('/search-users', (req, res) => {
   });
 });
 
-// Server-side code
 app.post('/add-friend/:friendId', (req, res) => {
   // Extract the user ID from the session
   const userId = req.session.user.id;

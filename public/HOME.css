@@ -9,7 +9,7 @@ body {
   #top-bar {
     background-color: #222;
     padding: 10px;
-    text-align: center; /* Center the links */
+    text-align: center;  
   }
   
   #top-bar nav ul {
@@ -24,8 +24,8 @@ body {
   }
   
   #top-bar nav ul li a {
-    color: #fff; /* Change link color */
-    text-decoration: none; /* Remove underline */
+    color: #fff; 
+    text-decoration: none; 
   }
   
   #left-side {
@@ -98,7 +98,7 @@ body {
   }
   
   textarea {
-    width: calc(100% - 50px); /* Adjust for avatar and button */
+    width: calc(100% - 50px); 
     padding: 5px;
     background-color: #444;
     color: #fff;
@@ -142,7 +142,7 @@ body {
     border: none;
     border-radius: 5px;
   }
-  /* CSS styles for the comments */
+ 
   .comment {
     margin-top: 10px;
   }
@@ -152,17 +152,17 @@ body {
     height: 30px;
     border-radius: 50%;
     margin-right: 10px;
-    /* Add additional styling as needed */
+   
   }
   
   .comment .commenter-name {
     font-weight: bold;
-    color: #333; /* Change the color as needed */
-    /* Add additional styling as needed */
+    color: #333; 
+   
   }
   
   .comment .comment-text {
-    /* Add additional styling as needed */
+
   }
   .friend-img{
     width: 100px;
@@ -177,12 +177,12 @@ body {
     
 
 }
-/* Add spacing between posts */
+
 .post {
   margin-bottom: 20px;
 }
 
-/* Style for comment section */
+
 .post-comments {
   margin-top: 10px;
   padding: 10px;
@@ -194,28 +194,27 @@ body {
   margin-bottom: 5px;
 }
 .no-comments {
-  color: #999; /* Set the text color to a gray shade */
-  font-style: italic; /* Italicize the text */
-  margin-top: 10px; /* Add some space above the message */
+  color: #999; 
+  font-style: italic; 
+  margin-top: 10px; 
 }
-/* Style for comment section */
+
 .post-comments {
   margin-top: 10px;
   padding: 10px;
-  background-color: #555; /* Adjust background color */
+  background-color: #555; 
   border-radius: 5px;
 }
 
-/* Style for individual comments */
 .comment {
   margin-top: 10px;
   padding: 5px;
-  background-color: #444; /* Adjust background color */
+  background-color: #444;
   border-radius: 5px;
 }
 
 .comment p {
-  color: #fff; /* Adjust text color */
+  color: #fff;
 }
 
 .comment .commenter-avatar {
@@ -223,55 +222,51 @@ body {
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
-  background-color: #666; /* Adjust background color */
+  background-color: #666;
 }
 
 .comment .commenter-name {
   font-weight: bold;
-  color: #fff; /* Adjust text color */
+  color: #fff; 
 }
 
 .comment .comment-text {
-  color: #ccc; /* Adjust text color */
+  color: #ccc; 
 }
 .post-comments {
   margin-top: 10px;
   padding: 10px;
-  background-color: #555; /* Adjust background color */
+  background-color: #555; 
   border-radius: 5px;
 }
 
-/* Style for individual comments */
+
 .comment {
   margin-top: 10px;
   padding: 10px;
-  background-color: #444; /* Adjust background color */
+  background-color: #444;  
   border-radius: 5px;
 }
 
-/* Style for comment text */
 .comment p {
-  color: #fff; /* Adjust text color */
+  color: #fff; 
 }
 
-/* Style for commenter avatar */
 .comment .commenter-avatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
-  background-color: #666; /* Adjust background color */
+  background-color: #666; 
 }
 
-/* Style for commenter name */
 .comment .commenter-name {
   font-weight: bold;
-  color: #fff; /* Adjust text color */
+  color: #fff;  
 }
 
-/* Style for comment text */
 .comment .comment-text {
-  color: #ccc; /* Adjust text color */
+  color: #ccc; 
 }
 #top-bar {
   background-color: #333;
@@ -308,7 +303,7 @@ body {
 #top-bar nav ul li a:hover {
   background-color: #555;
 }
-/* CSS styles for the top bar */
+
 #top-bar {
   background-color: #333;
   padding: 10px;
@@ -325,7 +320,7 @@ body {
 
 #top-bar nav {
   flex-grow: 1;
-  text-align: center; /* Center the navigation */
+  text-align: center; 
 }
 
 #top-bar nav ul {
@@ -348,4 +343,9 @@ body {
 
 #top-bar nav ul li a:hover {
   background-color: #555;
+}
+.username{
+  border-radius: 90%;
+  padding: 10px;
+  background-color: black;
 }

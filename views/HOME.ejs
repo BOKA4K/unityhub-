@@ -16,26 +16,19 @@
 </style>
 </head>
 <body>
-    <header id="top-bar">
+  <header id="top-bar">
+    <h1>UnityHub</h1>
     <nav>
         <ul>
-            <li class="nav-item"><a href="/">Home</a></li>
-            <li class="nav-item"><a href="/addfriend">Add Friends</a></li> <!-- Add this line -->
-            <li class="nav-item"><a href="#">Chat</a></li>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/addfriend">Add Friends</a></li>
+            <li><a href="/chat">Chat</a></li>
         </ul>
     </nav>
 </header>
+</header>
     <main>
-        <aside id="left-side">
-            <h2>Chat</h2>
-            <!-- Each friend represented as a div with picture and name -->
-            <% friends.forEach(friend => { %>
-                <div class="friend">
-                    <img src="<%= friend.profile_picture %>" alt="<%= friend.username %>" class="friend-img">
-                    <p><%= friend.username %></p>
-                </div>
-            <% }); %>
-        </aside>
+       
     <section id="center">
     <!-- Posts will be dynamically added here -->
     <% posts.forEach(post => { %>
@@ -93,12 +86,9 @@
 
         <aside id="right-side">
             <div class="profile">
-                <img id="profile-img" src="<%= user.profile_picture %>" alt="<%= user.username %>'s Profile Picture">
                 <h3><%= user.username %></h3>
             </div>
-            <div class="search">
-                <input type="text" id="search-bar" placeholder="Search...">
-            </div>
+           
             <div id="post-form">
   <h3>Create New Post</h3>
   <textarea id="post-text" placeholder="What's on your mind?"></textarea>

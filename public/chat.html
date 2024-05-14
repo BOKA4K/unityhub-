@@ -7,56 +7,118 @@
   <link rel="stylesheet" type="text/css" href="chat.css">
 </head>
 <body>
+  <header id="top-bar">
+    <h1>UnityHub</h1>
+    <nav>
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/addfriend">Add Friends</a></li>
+            <li><a href="/chat">Chat</a></li>
+        </ul>
+    </nav>
+</header>
   <div class="sidebar">
     <ul class="friends-list">
-      <li>
-        <img src="friend1.jpg" alt="Friend 1">
-        <p class="friend-name">Friend 1</p>
-      </li>
-      <li>
-        <img src="friend2.jpg" alt="Friend 2">
-        <p class="friend-name">Friend 2</p>
-      </li>
-      <li>
-        <img src="friend2.jpg" alt="Friend 2">
-        <p class="friend-name">Friend 3</p>
-      </li>
-      <li>
-        <img src="friend2.jpg" alt="Friend 2">
-        <p class="friend-name">Friend 4</p>
-      </li>
-      <li>
-        <img src="friend2.jpg" alt="Friend 2">
-        <p class="friend-name">Friend 5</p>
-      </li>
-      <li>
-        <img src="friend2.jpg" alt="Friend 2">
-        <p class="friend-name">Friend 6</p>
-      </li>
-      <!-- Add more friends as needed -->
+      <!-- Friends will be dynamically added here -->
     </ul>
   </div>
   <div class="chat-container">
     <div class="messages">
-      <div class="message sender-message">
-        <span class="sender">User1</span>
-        <br>
-        Hello, how are you?
-        <br>
-        <span class="timestamp">12:30 PM</span>
-      </div>
-      <div class="message receiver-message">
-        <span class="sender">User2</span><br>
-        I'm good, thank you!
-        <br>
-        <span class="timestamp">12:31 PM</span>
-      </div>
-      <!-- More messages go here -->
+      <!-- Messages display area -->
     </div>
     <div class="input-container">
-      <input type="text" placeholder="Type your message...">
-      <button>Send</button>
+      <input type="text" id="messageInput" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
+
+  <script>
+    let selectedFriendId = null;
+    let lastMessageId = null;
+    
+    function selectFriend(friendId) {
+      selectedFriendId = friendId;
+      lastMessageId = null; // Reset last message ID
+      fetchMessages();
+    }
+    
+    function fetchMessages() {
+      if (!selectedFriendId) return;
+      const url = `/messages?friendId=${selectedFriendId}${lastMessageId ? `&lastMessageId=${lastMessageId}` : ''}`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const messagesContainer = document.querySelector('.messages');
+          let shouldScroll = false;
+          if (!lastMessageId) {
+            messagesContainer.innerHTML = ''; // Clear previous messages if it's the initial fetch
+            shouldScroll = true;
+          }
+          data.forEach(message => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(message.sender_id === selectedFriendId ? 'receiver-message' : 'sender-message');
+            messageElement.textContent = message.message;
+            messagesContainer.appendChild(messageElement);
+            lastMessageId = message.id; // Update last message ID
+            shouldScroll = true;
+          });
+          if (shouldScroll) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          }
+        })
+        .catch(error => console.error('Error fetching messages:', error));
+    }
+    
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value.trim();
+      if (!message || !selectedFriendId) return;
+    
+      fetch('/send-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          friendId: selectedFriendId,
+          message: message
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          messageInput.value = ''; // Clear input after sending message
+          fetchMessages(); // Fetch messages again to update the chat
+        } else {
+          console.error('Failed to send message');
+        }
+      })
+      .catch(error => console.error('Error sending message:', error));
+    }
+    
+    // Fetch friends from the server
+    fetch('/friends')
+      .then(response => response.json())
+      .then(data => {
+        const friendsList = document.querySelector('.friends-list');
+        data.forEach(friend => {
+          const listItem = document.createElement('li');
+          const friendName = document.createElement('span');
+          friendName.textContent = friend.username;
+          friendName.classList.add('friend-name');
+          listItem.appendChild(friendName);
+          const chatButton = document.createElement('button');
+          chatButton.textContent = 'Chat';
+          chatButton.onclick = () => selectFriend(friend.id);
+          listItem.appendChild(chatButton);
+          friendsList.appendChild(listItem);
+        });
+      })
+      .catch(error => console.error('Error fetching friends:', error));
+    
+    // Fetch new messages every 5 seconds
+    setInterval(fetchMessages, 500);
+    
+  </script>
 </body>
 </html>

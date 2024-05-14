@@ -386,6 +386,71 @@ app.post('/add-friend', (req, res) => {
       });
   });
 });
+app.get('/chat', (req, res) => {
+  // Check if the user is logged in
+  if (!req.session.user) {
+    // If the user is not logged in, redirect to the login page
+    return res.redirect('/');
+  }
+
+  // If the user is logged in, serve the chat.html page
+  res.sendFile(path.join(__dirname, 'public', 'chat.html'));
+});
+
+app.post('/send-message', (req, res) => {
+  const { friendId, message } = req.body;
+  const userId = req.session.user.id;
+
+  const sql = 'INSERT INTO chat_messages (sender_id, receiver_id, message) VALUES (?, ?, ?)';
+  connection.query(sql, [userId, friendId, message], (err, result) => {
+    if (err) {
+      console.error('Error inserting message into database:', err.message);
+      return res.status(500).json({ error: 'An error occurred while processing your request' });
+    }
+    res.status(200).json({ message: 'Message sent successfully' });
+  });
+});
+
+// Route to fetch messages between the current user and a friend
+app.get('/messages', (req, res) => {
+  const friendId = req.query.friendId;
+  const userId = req.session.user.id;
+
+  const sql = `
+    SELECT sender_id, receiver_id, message
+    FROM chat_messages
+    WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)
+    ORDER BY sent_at ASC
+  `;
+  connection.query(sql, [userId, friendId, friendId, userId], (err, messages) => {
+    if (err) {
+      console.error('Error fetching messages:', err.message);
+      return res.status(500).json({ error: 'An error occurred while processing your request' });
+    }
+    res.json(messages.map(message => ({
+      ...message,
+      isSender: message.sender_id === userId
+    })));
+  });
+});
+
+// Route to fetch friends of the current user
+
+app.get('/friends', (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const userId = req.session.user.id;
+  const sql = 'SELECT users.id, users.username, users.profile_picture FROM users INNER JOIN friends ON users.id = friends.friend_id WHERE friends.user_id = ?';
+  connection.query(sql, [userId], (err, friends) => {
+    if (err) {
+      console.error('Error fetching friends:', err.message);
+      return res.status(500).json({ error: 'An error occurred while fetching friends' });
+    }
+    res.json(friends);
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

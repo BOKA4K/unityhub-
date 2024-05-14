@@ -104,3 +104,100 @@ body {
 .input-container button:hover {
   background-color: #555;
 }
+#top-bar {
+  background-color: #222;
+  padding: 10px;
+  text-align: center; /* Center the links */
+}
+
+#top-bar nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#top-bar nav ul li {
+  display: inline;
+  margin-right: 10px;
+}
+
+#top-bar nav ul li a {
+  color: #fff; /* Change link color */
+  text-decoration: none; /* Remove underline */
+}
+#top-bar {
+  background-color: #333;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#top-bar h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #fff;
+}
+
+#top-bar nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#top-bar nav ul li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#top-bar nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+#top-bar nav ul li a:hover {
+  background-color: #555;
+}
+/* CSS styles for the top bar */
+#top-bar {
+  background-color: #333;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#top-bar h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #fff;
+}
+
+#top-bar nav {
+  flex-grow: 1;
+  text-align: center; /* Center the navigation */
+}
+
+#top-bar nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#top-bar nav ul li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#top-bar nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+#top-bar nav ul li a:hover {
+  background-color: #555;
+}

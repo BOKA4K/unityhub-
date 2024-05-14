@@ -95,6 +95,7 @@
         </aside>
     </main>
     <script src="Home.js"></script>
+    <input type="hidden" id="user-id" value="<%= user.id %>"> <!-- Add this input field -->
 
 
 <script>
@@ -130,106 +131,23 @@
     });
 </script>
 <script>
-// Client-side code to handle posting a new post
-// Client-side code to handle posting a new post
-document.getElementById('post-btn').addEventListener('click', async () => {
-  const text = document.getElementById('post-text').value.trim();
-  if (!text) {
-    alert('Please enter some text for your post.');
-    return;
-  }
-
-  const response = await fetch('/post', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ userId: '<%= user.id %>', text })
-  });
-
-  if (response.ok) {
-    const postData = await response.json();
-    // Call a function to append the new post to the page
-    appendPost(postData);
-  } else {
-    const data = await response.json();
-    alert(data.error || 'An error occurred while adding your post');
-  }
-});
-
-// Function to append a new post to the page
-function appendPost(postData) {
-  const { id, username, profile_picture, text, file_path, file_type, likes, shares } = postData;
-
-  // Create HTML for the new post
-  const postHTML = `
-    <div class="post" data-post-id="${id}" data-liked="false">
-      <div class="post-header">
-          <span class="username">${username}</span>
-      </div>
-      <div class="post-content">
-          <p>${text}</p>
-          ${fileHTML(file_path, file_type)}
-      </div>
-      <div class="post-actions">
-          <button class="like-btn">Like (${likes})</button>
-          <button class="share-btn">Share (${shares})</button>
-          <button class="comment-btn">Comment</button>
-      </div>
-    </div>
-  `;
-
-  // Append the new post to the page
-  document.getElementById('center').insertAdjacentHTML('afterbegin', postHTML);
-}
-
-// Function to generate HTML for different types of post attachments (image, video, audio, document)
-function fileHTML(filePath, fileType) {
-  if (!filePath) return '';
-  switch (fileType) {
-    case 'image':
-      return `<img src="${filePath}" alt="Post Image">`;
-    case 'video':
-      return `
-        <video controls>
-          <source src="${filePath}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      `;
-    case 'audio':
-      return `
-        <audio controls>
-          <source src="${filePath}" type="audio/mp3">
-          Your browser does not support the audio tag.
-        </audio>
-      `;
-    case 'document':
-      return `<a href="${filePath}">Download Document</a>`;
-    default:
-      return '';
-  }
-}
-
 
 </script>
 <script>
  document.getElementById('post-btn').addEventListener('click', async () => {
   const text = document.getElementById('post-text').value.trim();
   const fileInput = document.getElementById('post-file');
-  const file = fileInput.files[0]; // Get the selected file
   const userId = document.getElementById('user-id').value; // Get the user ID
 
-  if (!text && !file) {
-    alert('Please enter some text or select a file for your post.');
+  if (!text) {
+    alert('Please enter some text ');
     return;
   }
 
   const formData = new FormData();
   formData.append('userId', userId); // Include the userId in the form data
   formData.append('text', text);
-  if (file) {
-    formData.append('file', file);
-  }
+  
 
   const response = await fetch('/post', {
     method: 'POST',
@@ -237,7 +155,6 @@ function fileHTML(filePath, fileType) {
   });
 
   if (response.ok) {
-    alert('Post added successfully');
     window.location.reload(); // Reload the page to display the new post
   } else {
     const data = await response.json();
@@ -267,18 +184,31 @@ function fileHTML(filePath, fileType) {
 
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const commentButtons = document.querySelectorAll('.comment-btn');
-    
-    commentButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const postElement = button.closest('.post');
-            const commentInputWrapper = postElement.querySelector('.comment-input-wrapper');
-            commentInputWrapper.style.display = 'block'; // Show the comment input area
+  
+</script>
+<script>
+ document.addEventListener('DOMContentLoaded', async () => {
+    const posts = document.querySelectorAll('.post');
+    posts.forEach(async (post) => {
+        const postId = post.dataset.postId;
+        const response = await fetch(`/comments?postId=${postId}`);
+        const comments = await response.json();
+        const commentContainer = post.querySelector('.post-comments');
+        commentContainer.innerHTML = ''; // Clear existing comments
+        comments.forEach(comment => {
+            const commentHTML = `
+                <div class="comment">
+                    <p>${comment.username}: ${comment.text}</p>
+                </div>
+            `;
+            commentContainer.insertAdjacentHTML('beforeend', commentHTML);
         });
     });
+});
 
-    // Handle post comment button click
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
     const postCommentButtons = document.querySelectorAll('.post-comment-btn');
     
     postCommentButtons.forEach(button => {
@@ -303,7 +233,22 @@ function fileHTML(filePath, fileType) {
             });
 
             if (response.ok) {
-                commentTextarea.value = ''; // Clear the comment textarea
+                // Clear the comment textarea
+                commentTextarea.value = '';
+
+                // Retrieve the newly added comment data
+                const newCommentData = await response.json();
+                const name1=newCommentData.username;
+                // Create HTML markup for the new comment
+                const newCommentHTML = `
+                    <div class="comment">
+                        <p>${newCommentData.comment.username}: ${newCommentData.comment.text}</p>
+                    </div>
+                `;
+
+                // Find the comment container within the post element and append the new comment HTML
+                const commentContainer = postElement.querySelector('.post-comments');
+                commentContainer.insertAdjacentHTML('beforeend', newCommentHTML);
             } else {
                 const data = await response.json();
                 alert(data.error || 'An error occurred while adding your comment.');
@@ -312,80 +257,6 @@ function fileHTML(filePath, fileType) {
     });
 });
 
-
-</script>
-<script>
- document.addEventListener('DOMContentLoaded', async () => {
-    const posts = document.querySelectorAll('.post');
-    posts.forEach(async (post) => {
-        const postId = post.dataset.postId;
-        const response = await fetch(`/comments?postId=${postId}`);
-        const comments = await response.json();
-        const commentContainer = post.querySelector('.post-comments');
-        commentContainer.innerHTML = ''; // Clear existing comments
-        comments.forEach(comment => {
-            const commentHTML = `
-                <div class="comment">
-                    <p>${comment.username}: ${comment.text}</p>
-                </div>
-            `;
-            commentContainer.insertAdjacentHTML('beforeend', commentHTML);
-        });
-    });
-});
-
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const postCommentButtons = document.querySelectorAll('.post-comment-btn');
-        
-        postCommentButtons.forEach(button => {
-            button.addEventListener('click', async () => {
-                const postElement = button.closest('.post');
-                const postId = postElement.dataset.postId;
-                const commentTextarea = postElement.querySelector('.comment-textarea');
-                const commentText = commentTextarea.value.trim();
-    
-                if (!commentText) {
-                    alert('Please enter your comment.');
-                    return;
-                }
-    
-                // Send the comment data to the server
-                const response = await fetch('/comment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ postId, commentText })
-                });
-    
-                if (response.ok) {
-                    // Clear the comment textarea
-                    commentTextarea.value = '';
-    
-                    // Retrieve the newly added comment data
-                    const newCommentData = await response.json();
-    
-                    // Create HTML markup for the new comment
-                    const newCommentHTML = `
-                        <div class="comment">
-                            <p>${newCommentData.username}: ${newCommentData.text}</p>
-                        </div>
-                    `;
-    
-                    // Find the comment container within the post element and append the new comment HTML
-                    const commentContainer = postElement.querySelector('.post-comments');
-                    commentContainer.insertAdjacentHTML('beforeend', newCommentHTML);
-                } else {
-                    const data = await response.json();
-                    alert(data.error || 'An error occurred while adding your comment.');
-                }
-            });
-        });
-    });
-
-    
 </Script>
 </body>
 </html>

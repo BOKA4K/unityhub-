@@ -267,9 +267,26 @@ app.post('/comment', (req, res) => {
           console.error('Error inserting comment into database:', err.message);
           return res.status(500).json({ error: 'An error occurred while processing your request' });
       }
-      res.status(200).json({ message: 'Comment added successfully' });
+
+      // Retrieve the newly added comment from the database
+      const getCommentSql = `
+          SELECT pc.*, u.username
+          FROM post_comments pc
+          INNER JOIN users u ON pc.user_id = u.id
+          WHERE pc.id = ?
+      `;
+      connection.query(getCommentSql, [result.insertId], (getCommentErr, commentResult) => {
+          if (getCommentErr || commentResult.length === 0) {
+              console.error('Error retrieving newly added comment:', getCommentErr ? getCommentErr.message : 'Comment not found');
+              return res.status(500).json({ error: 'An error occurred while processing your request' });
+          }
+          const newComment = commentResult[0];
+          res.status(200).json({ message: 'Comment added successfully', comment: newComment });
+
+      });
   });
 });
+
 app.get('/comments', (req, res) => {
   const postId = req.query.postId;
   const sql = `
